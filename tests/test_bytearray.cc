@@ -7,7 +7,7 @@
 #include "../include/env.h"
 
 
-static sylar::Logger::ptr g_logger = MYSYLAR_LOG_ROOT();
+static lamb::Logger::ptr g_logger = LAMB_LOG_ROOT();
 
 void test() {
 /* 
@@ -22,17 +22,17 @@ void test() {
         for (int i = 0; i < len; ++i) {                            \
             vec.push_back(rand());                                 \
         }                                                          \
-        sylar::ByteArray::ptr ba(new sylar::ByteArray(base_len));  \
+        lamb::ByteArray::ptr ba(new lamb::ByteArray(base_len));  \
         for (auto &i : vec) {                                      \
             ba->write_fun(i);                                      \
         }                                                          \
         ba->setPosition(0);                                        \
         for (size_t i = 0; i < vec.size(); ++i) {                  \
             type v = ba->read_fun();                               \
-            MYSYLAR_ASSERT(v == vec[i]);                             \
+            LAMB_ASSERT(v == vec[i]);                             \
         }                                                          \
-        MYSYLAR_ASSERT(ba->getReadSize() == 0);                      \
-        MYSYLAR_LOG_INFO(g_logger) << #write_fun "/" #read_fun       \
+        LAMB_ASSERT(ba->getReadSize() == 0);                      \
+        LAMB_LOG_INFO(g_logger) << #write_fun "/" #read_fun       \
                                                " (" #type ") len=" \
                                  << len                            \
                                  << " base_len=" << base_len       \
@@ -65,30 +65,30 @@ void test() {
         for (int i = 0; i < len; ++i) {                                               \
             vec.push_back(rand());                                                    \
         }                                                                             \
-        sylar::ByteArray::ptr ba(new sylar::ByteArray(base_len));                     \
+        lamb::ByteArray::ptr ba(new lamb::ByteArray(base_len));                     \
         for (auto &i : vec) {                                                         \
             ba->write_fun(i);                                                         \
         }                                                                             \
         ba->setPosition(0);                                                           \
         for (size_t i = 0; i < vec.size(); ++i) {                                     \
             type v = ba->read_fun();                                                  \
-            MYSYLAR_ASSERT(v == vec[i]);                                                \
+            LAMB_ASSERT(v == vec[i]);                                                \
         }                                                                             \
-        MYSYLAR_ASSERT(ba->getReadSize() == 0);                                         \
-        MYSYLAR_LOG_INFO(g_logger) << #write_fun "/" #read_fun                          \
+        LAMB_ASSERT(ba->getReadSize() == 0);                                         \
+        LAMB_LOG_INFO(g_logger) << #write_fun "/" #read_fun                          \
                                                " (" #type ") len="                    \
                                  << len                                               \
                                  << " base_len=" << base_len                          \
                                  << " size=" << ba->getSize();                        \
         ba->setPosition(0);                                                           \
-        std::string filepath = "/home/chensir/Documents/mysylar/tests/tmp/" #type "_" #len "-" #read_fun ".dat";           \
-        MYSYLAR_ASSERT(ba->writeToFile(filepath));   \
-        sylar::ByteArray::ptr ba2(new sylar::ByteArray(base_len * 2));                \
-        MYSYLAR_ASSERT(ba2->readFromFile(filepath)); \
+        std::string filepath = "/home/chensir/Documents/mylamb/tests/tmp/" #type "_" #len "-" #read_fun ".dat";           \
+        LAMB_ASSERT(ba->writeToFile(filepath));   \
+        lamb::ByteArray::ptr ba2(new lamb::ByteArray(base_len * 2));                \
+        LAMB_ASSERT(ba2->readFromFile(filepath)); \
         ba2->setPosition(0);                                                            \
-        MYSYLAR_ASSERT(ba->toString() == ba2->toString());                              \
-        MYSYLAR_ASSERT(ba->getPosition() == 0);                                         \
-        MYSYLAR_ASSERT(ba2->getPosition() == 0);                                        \
+        LAMB_ASSERT(ba->toString() == ba2->toString());                              \
+        LAMB_ASSERT(ba->getPosition() == 0);                                         \
+        LAMB_ASSERT(ba2->getPosition() == 0);                                        \
     }
     XX(int8_t, 100, writeFint8, readFint8, 1);
     XX(uint8_t, 100, writeFuint8, readFuint8, 1);
@@ -117,17 +117,17 @@ void test() {
             random_shuffle(s.begin(), s.end());                   \
             vec.push_back(s);                                     \
         }                                                         \
-        sylar::ByteArray::ptr ba(new sylar::ByteArray(base_len)); \
+        lamb::ByteArray::ptr ba(new lamb::ByteArray(base_len)); \
         for (auto &i : vec) {                                     \
             ba->write_fun(i);                                     \
         }                                                         \
         ba->setPosition(0);                                       \
         for (size_t i = 0; i < vec.size(); ++i) {                 \
             std::string v = ba->read_fun();                       \
-            MYSYLAR_ASSERT(v == vec[i]);                            \
+            LAMB_ASSERT(v == vec[i]);                            \
         }                                                         \
-        MYSYLAR_ASSERT(ba->getReadSize() == 0);                     \
-        MYSYLAR_LOG_INFO(g_logger) << #write_fun "/" #read_fun      \
+        LAMB_ASSERT(ba->getReadSize() == 0);                     \
+        LAMB_LOG_INFO(g_logger) << #write_fun "/" #read_fun      \
                                                " ("               \
                                                "string"           \
                                                ") len="           \
@@ -144,8 +144,8 @@ void test() {
 
 int main(int argc, char *argv[]) {
 
-    sylar::EnvMgr::GetInstance()->init(argc, argv);
-    sylar::Config::LoadFromConfDir(sylar::EnvMgr::GetInstance()->getConfigPath());
+    lamb::EnvMgr::GetInstance()->init(argc, argv);
+    lamb::Config::LoadFromConfDir(lamb::EnvMgr::GetInstance()->getConfigPath());
     test();
     return 0;
 }

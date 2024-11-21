@@ -2,7 +2,7 @@
  * @file test_ws_web_server.cc
  * @brief 网页WebSocket Echo服务器
  *        这个示例用于展示如何结合http和websocket来一起构建网页应用
- *        有一点要注意，实际上http和WebSocket可以共用同一个端口，但sylar未实现这种方式
+ *        有一点要注意，实际上http和WebSocket可以共用同一个端口，但lamb未实现这种方式
  * @version 0.1
  * @date 2022-07-26
  */
@@ -12,11 +12,11 @@
 #include "../include/env.h"
 #include "../include/http/http_server.h"
 
-static sylar::Logger::ptr g_logger = MYSYLAR_LOG_ROOT();
+static lamb::Logger::ptr g_logger = LAMB_LOG_ROOT();
 
 #define XX(...) #__VA_ARGS__
 
-int32_t handleChat(sylar::http::HttpRequest::ptr req, sylar::http::HttpResponse::ptr rsp, sylar::http::HttpSession::ptr session)
+int32_t handleChat(lamb::http::HttpRequest::ptr req, lamb::http::HttpResponse::ptr rsp, lamb::http::HttpSession::ptr session)
 {
     rsp->setHeader("Content-Type", "text/html; charset=UTF-8");
     rsp->setBody(XX(
@@ -71,27 +71,27 @@ int32_t handleChat(sylar::http::HttpRequest::ptr req, sylar::http::HttpResponse:
 
 void run_http_server()
 {
-    sylar::http::HttpServer::ptr server(new sylar::http::HttpServer(true));
-    sylar::Address::ptr addr = sylar::Address::LookupAnyIPAddress("0.0.0.0:8020");
+    lamb::http::HttpServer::ptr server(new lamb::http::HttpServer(true));
+    lamb::Address::ptr addr = lamb::Address::LookupAnyIPAddress("0.0.0.0:8020");
     while (!server->bind(addr))
     {
         sleep(2);
     }
     auto sd = server->getServletDispatch();
-    sd->addServlet("/sylar/chat", handleChat);
+    sd->addServlet("/lamb/chat", handleChat);
     server->start();
 }
 
 void run_ws_server()
 {
-    sylar::http::WSServer::ptr server(new sylar::http::WSServer);
-    sylar::Address::ptr addr = sylar::Address::LookupAnyIPAddress("0.0.0.0:8021");
+    lamb::http::WSServer::ptr server(new lamb::http::WSServer);
+    lamb::Address::ptr addr = lamb::Address::LookupAnyIPAddress("0.0.0.0:8021");
     if (!addr)
     {
-        MYSYLAR_LOG_ERROR(g_logger) << "get address error";
+        LAMB_LOG_ERROR(g_logger) << "get address error";
         return;
     }
-    auto fun = [](sylar::http::HttpRequest::ptr header, sylar::http::WSFrameMessage::ptr msg, sylar::http::WSSession::ptr session)
+    auto fun = [](lamb::http::HttpRequest::ptr header, lamb::http::WSFrameMessage::ptr msg, lamb::http::WSSession::ptr session)
     {
         session->sendMessage(msg);
         return 0;
@@ -100,7 +100,7 @@ void run_ws_server()
     server->getWSServletDispatch()->addServlet("/chat", fun);
     while (!server->bind(addr))
     {
-        MYSYLAR_LOG_ERROR(g_logger) << "bind " << *addr << " fail";
+        LAMB_LOG_ERROR(g_logger) << "bind " << *addr << " fail";
         sleep(1);
     }
     server->start();
@@ -108,10 +108,10 @@ void run_ws_server()
 
 int main(int argc, char **argv)
 {
-    sylar::EnvMgr::GetInstance()->init(argc, argv);
-    sylar::Config::LoadFromConfDir(sylar::EnvMgr::GetInstance()->getConfigPath());
+    lamb::EnvMgr::GetInstance()->init(argc, argv);
+    lamb::Config::LoadFromConfDir(lamb::EnvMgr::GetInstance()->getConfigPath());
 
-    sylar::IOManager iom(2);
+    lamb::IOManager iom(2);
     iom.schedule(run_http_server);
     iom.schedule(run_ws_server);
     return 0;

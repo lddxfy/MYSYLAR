@@ -1,8 +1,8 @@
-#include "../include/http.h"
+#include "../include/http/http.h"
 
 void test_http_request() {
-    sylar::http::HttpRequest req;
-    req.setMethod(sylar::http::HttpMethod::GET);
+    lamb::http::HttpRequest req;
+    req.setMethod(lamb::http::HttpMethod::GET);
     req.setVersion(0x11);
     req.setPath("/search");
     req.setQuery("q=url+%E5%8F%82%E6%95%B0%E6%9E%84%E9%80%A0&oq=url+%E5%8F%82%E6%95%B0%E6%9E%84%E9%80%A0+&aqs=chrome..69i57.8307j0j7&sourceid=chrome&ie=UTF-8");
@@ -25,8 +25,8 @@ void test_http_request() {
 }
 
 void test_http_response() {
-    sylar::http::HttpResponse rsp;
-    rsp.setStatus(sylar::http::HttpStatus::OK);
+    lamb::http::HttpResponse rsp;
+    rsp.setStatus(lamb::http::HttpStatus::OK);
     rsp.setHeader("Content-Type", "text/html");
     rsp.setBody("<!DOCTYPE html>"
                 "<html>"

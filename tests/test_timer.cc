@@ -10,17 +10,17 @@
 #include "../include/config.h"
 #include "../include/env.h"
 
-static sylar::Logger::ptr g_logger = MYSYLAR_LOG_ROOT();
+static lamb::Logger::ptr g_logger = LAMB_LOG_ROOT();
 
 static int timeout = 1000;
-static sylar::Timer::ptr s_timer;
+static lamb::Timer::ptr s_timer;
 
 struct timer_info {
     int cancelled = 0;
 };
 
 void timer_callback() {
-    MYSYLAR_LOG_INFO(g_logger) << "timer callback, timeout = " << timeout;
+    LAMB_LOG_INFO(g_logger) << "timer callback, timeout = " << timeout;
     timeout += 1000;
     if(timeout < 5000) {
         s_timer->reset(timeout, true);
@@ -30,37 +30,37 @@ void timer_callback() {
 }
 
 void test_timer() {
-    sylar::IOManager iom;
+    lamb::IOManager iom;
 
     // 循环定时器
     // s_timer = iom.addTimer(1000, timer_callback, true);
     
     // 单次定时器
     auto timer = iom.addTimer(1000, []{
-        MYSYLAR_LOG_INFO(g_logger) << "500ms timeout";
+        LAMB_LOG_INFO(g_logger) << "500ms timeout";
     });
     // std::shared_ptr<timer_info> tinfo(new timer_info);
     // std::weak_ptr<timer_info> winfo(tinfo);
     // iom.addConditionTimer(1000,[](){
-    //     MYSYLAR_LOG_INFO(g_logger) << "1000ms timeout";
+    //     LAMB_LOG_INFO(g_logger) << "1000ms timeout";
 
     // },winfo);
 
     
     // iom.addTimer(5000, []{
-    //     MYSYLAR_LOG_INFO(g_logger) << "5000ms timeout";
+    //     LAMB_LOG_INFO(g_logger) << "5000ms timeout";
     // });
     timer->cancel();
     
 }
 
 int main(int argc, char *argv[]) {
-    sylar::EnvMgr::GetInstance()->init(argc, argv);
-    sylar::Config::LoadFromConfDir(sylar::EnvMgr::GetInstance()->getConfigPath());
+    lamb::EnvMgr::GetInstance()->init(argc, argv);
+    lamb::Config::LoadFromConfDir(lamb::EnvMgr::GetInstance()->getConfigPath());
 
     test_timer();
 
-    MYSYLAR_LOG_INFO(g_logger) << "end";
+    LAMB_LOG_INFO(g_logger) << "end";
 
     return 0;
 }

@@ -4,26 +4,26 @@
 #include "../include/env.h"
 
 
-static sylar::Logger::ptr g_logger = MYSYLAR_LOG_ROOT();
+static lamb::Logger::ptr g_logger = LAMB_LOG_ROOT();
 
 void run(){
-    sylar::http::WSServer::ptr server(new sylar::http::WSServer);
-    sylar::Address::ptr addr = sylar::Address::LookupAnyIPAddress("0.0.0.0:8020");
+    lamb::http::WSServer::ptr server(new lamb::http::WSServer);
+    lamb::Address::ptr addr = lamb::Address::LookupAnyIPAddress("0.0.0.0:8020");
     if(!addr) {
-        MYSYLAR_LOG_ERROR(g_logger) << "get address error";
+        LAMB_LOG_ERROR(g_logger) << "get address error";
         return;
     }
 
-    auto fun = [](sylar::http::HttpRequest::ptr header
-                  ,sylar::http::WSFrameMessage::ptr msg
-                  ,sylar::http::WSSession::ptr session){
+    auto fun = [](lamb::http::HttpRequest::ptr header
+                  ,lamb::http::WSFrameMessage::ptr msg
+                  ,lamb::http::WSSession::ptr session){
         session->sendMessage(msg);
         return 0;
     };
 
-    server->getWSServletDispatch()->addServlet("/sylar",fun);
+    server->getWSServletDispatch()->addServlet("/lamb",fun);
     while(!server->bind(addr)){
-        MYSYLAR_LOG_ERROR(g_logger) << "bind " << *addr << " fail";
+        LAMB_LOG_ERROR(g_logger) << "bind " << *addr << " fail";
         sleep(1);
     }
 
@@ -32,9 +32,9 @@ void run(){
 
 
 int main(int argc, char** argv){
-    sylar::EnvMgr::GetInstance()->init(argc,argv);
-    sylar::Config::LoadFromConfDir(sylar::EnvMgr::GetInstance()->getConfigPath());
+    lamb::EnvMgr::GetInstance()->init(argc,argv);
+    lamb::Config::LoadFromConfDir(lamb::EnvMgr::GetInstance()->getConfigPath());
 
-    sylar::IOManager iom(2);
+    lamb::IOManager iom(2);
     iom.schedule(run);
 }

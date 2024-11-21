@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 定义目标目录
-TARGET_DIR="/usr/include/sylar"
+TARGET_DIR="/usr/include/lamb"
 
 # 删除头文件
 if [ -d "$TARGET_DIR" ]; then

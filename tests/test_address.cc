@@ -1,9 +1,9 @@
-#include "include/log.h"
-#include "include/address.h"
-#include "include/config.h"
-#include "include/env.h"
+#include "../include/log.h"
+#include "../include/address.h"
+#include "../include/config.h"
+#include "../include/env.h"
 
-static sylar::Logger::ptr g_logger = MYSYLAR_LOG_ROOT();
+static lamb::Logger::ptr g_logger = LAMB_LOG_ROOT();
 
 const char *family2str(int family) {
     switch (family) {
@@ -23,20 +23,20 @@ const char *family2str(int family) {
  * @param[in] family 地址类型
  */
 void test_ifaces(int family) {
-    MYSYLAR_LOG_INFO(g_logger) << "test_ifaces: " << family2str(family);
+    LAMB_LOG_INFO(g_logger) << "test_ifaces: " << family2str(family);
 
-    std::multimap<std::string, std::pair<sylar::Address::ptr, uint32_t>> results;
-    bool v = sylar::Address::GetInterfaceAddresses(results, family);
+    std::multimap<std::string, std::pair<lamb::Address::ptr, uint32_t>> results;
+    bool v = lamb::Address::GetInterfaceAddresses(results, family);
     if (!v) {
-        MYSYLAR_LOG_ERROR(g_logger) << "GetInterfaceAddresses fail";
+        LAMB_LOG_ERROR(g_logger) << "GetInterfaceAddresses fail";
         return;
     }
     for (auto &i : results) {
-        MYSYLAR_LOG_INFO(g_logger) << i.first << " - " << i.second.first->toString() << " - "
+        LAMB_LOG_INFO(g_logger) << i.first << " - " << i.second.first->toString() << " - "
                                  << i.second.second;
     }
     
-    MYSYLAR_LOG_INFO(g_logger) << "\n";
+    LAMB_LOG_INFO(g_logger) << "\n";
 }
 
 /**
@@ -45,19 +45,19 @@ void test_ifaces(int family) {
  * @param[in] family 地址类型
  */
 void test_iface(const char *iface, int family) {
-    MYSYLAR_LOG_INFO(g_logger) << "test_iface: " << iface << ", " << family2str(family);
+    LAMB_LOG_INFO(g_logger) << "test_iface: " << iface << ", " << family2str(family);
 
-    std::vector<std::pair<sylar::Address::ptr, uint32_t>> result;
-    bool v = sylar::Address::GetInterfaceAddresses(result, iface, family);
+    std::vector<std::pair<lamb::Address::ptr, uint32_t>> result;
+    bool v = lamb::Address::GetInterfaceAddresses(result, iface, family);
     if(!v) {
-        MYSYLAR_LOG_ERROR(g_logger) << "GetInterfaceAddresses fail";
+        LAMB_LOG_ERROR(g_logger) << "GetInterfaceAddresses fail";
         return;
     }
     for(auto &i : result) {
-        MYSYLAR_LOG_INFO(g_logger) << i.first->toString() << " - " << i.second;
+        LAMB_LOG_INFO(g_logger) << i.first->toString() << " - " << i.second;
     }
 
-    MYSYLAR_LOG_INFO(g_logger) << "\n";
+    LAMB_LOG_INFO(g_logger) << "\n";
 }
 
 /**
@@ -66,93 +66,93 @@ void test_iface(const char *iface, int family) {
  * @note 这里没有区分不同的套接字类型，所以会有重复值
  */
 void test_lookup(const char *host) {
-    MYSYLAR_LOG_INFO(g_logger) << "test_lookup: " << host;
+    LAMB_LOG_INFO(g_logger) << "test_lookup: " << host;
 
-    MYSYLAR_LOG_INFO(g_logger) <<"Lookup:";
-    std::vector<sylar::Address::ptr> results;
-    bool v = sylar::Address::Lookup(results, host, AF_INET);
+    LAMB_LOG_INFO(g_logger) <<"Lookup:";
+    std::vector<lamb::Address::ptr> results;
+    bool v = lamb::Address::Lookup(results, host, AF_INET);
     if(!v) {
-        MYSYLAR_LOG_ERROR(g_logger) << "Lookup fail";
+        LAMB_LOG_ERROR(g_logger) << "Lookup fail";
         return;
     }
     for(auto &i : results) {
-        MYSYLAR_LOG_INFO(g_logger) << i->toString();
+        LAMB_LOG_INFO(g_logger) << i->toString();
     }
     
-    MYSYLAR_LOG_INFO(g_logger) <<"LookupAny:";
-    auto addr2 = sylar::Address::LookupAny(host);
-    MYSYLAR_LOG_INFO(g_logger) << addr2->toString();
+    LAMB_LOG_INFO(g_logger) <<"LookupAny:";
+    auto addr2 = lamb::Address::LookupAny(host);
+    LAMB_LOG_INFO(g_logger) << addr2->toString();
 
-    MYSYLAR_LOG_INFO(g_logger) <<"LookupAnyIPAddress:";
-    auto addr1 = sylar::Address::LookupAnyIPAddress(host);
-    MYSYLAR_LOG_INFO(g_logger) << addr1->toString();
+    LAMB_LOG_INFO(g_logger) <<"LookupAnyIPAddress:";
+    auto addr1 = lamb::Address::LookupAnyIPAddress(host);
+    LAMB_LOG_INFO(g_logger) << addr1->toString();
 
-    MYSYLAR_LOG_INFO(g_logger) << "\n";
+    LAMB_LOG_INFO(g_logger) << "\n";
 }
 
 /**
  * @brief IPv4地址类测试
  */
 void test_ipv4() {
-    MYSYLAR_LOG_INFO(g_logger) << "test_ipv4";
+    LAMB_LOG_INFO(g_logger) << "test_ipv4";
 
-    auto addr = sylar::IPAddress::Create("192.168.1.120");
+    auto addr = lamb::IPAddress::Create("192.168.1.120");
     if (!addr) {
-        MYSYLAR_LOG_ERROR(g_logger) << "IPAddress::Create error";
+        LAMB_LOG_ERROR(g_logger) << "IPAddress::Create error";
         return;
     }
-    MYSYLAR_LOG_INFO(g_logger) << "addr: " << addr->toString();
-    MYSYLAR_LOG_INFO(g_logger) << "family: " << family2str(addr->getFamily());  
-    MYSYLAR_LOG_INFO(g_logger) << "port: " << addr->getPort();  
-    MYSYLAR_LOG_INFO(g_logger) << "addr length: " << addr->getAddrLen(); 
+    LAMB_LOG_INFO(g_logger) << "addr: " << addr->toString();
+    LAMB_LOG_INFO(g_logger) << "family: " << family2str(addr->getFamily());  
+    LAMB_LOG_INFO(g_logger) << "port: " << addr->getPort();  
+    LAMB_LOG_INFO(g_logger) << "addr length: " << addr->getAddrLen(); 
 
-    MYSYLAR_LOG_INFO(g_logger) << "broadcast addr: " << addr->broadcastAddress(24)->toString();
-    MYSYLAR_LOG_INFO(g_logger) << "network addr: " << addr->networkAddress(24)->toString();
-    MYSYLAR_LOG_INFO(g_logger) << "subnet mask addr: " << addr->subnetMask(24)->toString();
+    LAMB_LOG_INFO(g_logger) << "broadcast addr: " << addr->broadcastAddress(24)->toString();
+    LAMB_LOG_INFO(g_logger) << "network addr: " << addr->networkAddress(24)->toString();
+    LAMB_LOG_INFO(g_logger) << "subnet mask addr: " << addr->subnetMask(24)->toString();
 
-    MYSYLAR_LOG_INFO(g_logger) << "\n";
+    LAMB_LOG_INFO(g_logger) << "\n";
 }
 
 /**
  * @brief IPv6地址类测试
  */
 void test_ipv6() {
-    MYSYLAR_LOG_INFO(g_logger) << "test_ipv6";
+    LAMB_LOG_INFO(g_logger) << "test_ipv6";
 
-    auto addr = sylar::IPAddress::Create("fe80::215:5dff:fe88:d8a");
+    auto addr = lamb::IPAddress::Create("fe80::215:5dff:fe88:d8a");
     if (!addr) {
-        MYSYLAR_LOG_ERROR(g_logger) << "IPAddress::Create error";
+        LAMB_LOG_ERROR(g_logger) << "IPAddress::Create error";
         return;
     }
-    MYSYLAR_LOG_INFO(g_logger) << "addr: " << addr->toString();
-    MYSYLAR_LOG_INFO(g_logger) << "family: " << family2str(addr->getFamily());  
-    MYSYLAR_LOG_INFO(g_logger) << "port: " << addr->getPort();  
-    MYSYLAR_LOG_INFO(g_logger) << "addr length: " << addr->getAddrLen(); 
+    LAMB_LOG_INFO(g_logger) << "addr: " << addr->toString();
+    LAMB_LOG_INFO(g_logger) << "family: " << family2str(addr->getFamily());  
+    LAMB_LOG_INFO(g_logger) << "port: " << addr->getPort();  
+    LAMB_LOG_INFO(g_logger) << "addr length: " << addr->getAddrLen(); 
 
-    MYSYLAR_LOG_INFO(g_logger) << "broadcast addr: " << addr->broadcastAddress(64)->toString();
-    MYSYLAR_LOG_INFO(g_logger) << "network addr: " << addr->networkAddress(64)->toString();
-    MYSYLAR_LOG_INFO(g_logger) << "subnet mask addr: " << addr->subnetMask(64)->toString();
-    MYSYLAR_LOG_INFO(g_logger) << "\n";
+    LAMB_LOG_INFO(g_logger) << "broadcast addr: " << addr->broadcastAddress(64)->toString();
+    LAMB_LOG_INFO(g_logger) << "network addr: " << addr->networkAddress(64)->toString();
+    LAMB_LOG_INFO(g_logger) << "subnet mask addr: " << addr->subnetMask(64)->toString();
+    LAMB_LOG_INFO(g_logger) << "\n";
 }
 
 /**
  * @brief Unix套接字解析
  */
 void test_unix() {
-    MYSYLAR_LOG_INFO(g_logger) << "test_unix";
+    LAMB_LOG_INFO(g_logger) << "test_unix";
     
-    auto addr = sylar::UnixAddress("/tmp/test_unix.sock");
-    MYSYLAR_LOG_INFO(g_logger) << "addr: " << addr.toString();
-    MYSYLAR_LOG_INFO(g_logger) << "family: " << family2str(addr.getFamily());  
-    MYSYLAR_LOG_INFO(g_logger) << "path: " << addr.getPath(); 
-    MYSYLAR_LOG_INFO(g_logger) << "addr length: " << addr.getAddrLen(); 
+    auto addr = lamb::UnixAddress("/tmp/test_unix.sock");
+    LAMB_LOG_INFO(g_logger) << "addr: " << addr.toString();
+    LAMB_LOG_INFO(g_logger) << "family: " << family2str(addr.getFamily());  
+    LAMB_LOG_INFO(g_logger) << "path: " << addr.getPath(); 
+    LAMB_LOG_INFO(g_logger) << "addr length: " << addr.getAddrLen(); 
 
-    MYSYLAR_LOG_INFO(g_logger) << "\n";
+    LAMB_LOG_INFO(g_logger) << "\n";
 }
 
 int main(int argc, char *argv[]) {
-    sylar::EnvMgr::GetInstance()->init(argc, argv);
-    sylar::Config::LoadFromConfDir(sylar::EnvMgr::GetInstance()->getConfigPath());
+    lamb::EnvMgr::GetInstance()->init(argc, argv);
+    lamb::Config::LoadFromConfDir(lamb::EnvMgr::GetInstance()->getConfigPath());
 
     // 获取本机所有网卡的IPv4地址和IPv6地址以及掩码长度
     test_ifaces(AF_INET);

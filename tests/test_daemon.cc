@@ -5,15 +5,15 @@
 
 
 
-static sylar::Logger::ptr g_logger = MYSYLAR_LOG_ROOT();
+static lamb::Logger::ptr g_logger = LAMB_LOG_ROOT();
 
-sylar::Timer::ptr timer;
+lamb::Timer::ptr timer;
 int server_main(int argc, char **argv) {
-    MYSYLAR_LOG_INFO(g_logger) << sylar::ProcessInfoMgr::GetInstance()->toString();
-    sylar::IOManager iom(1);
+    LAMB_LOG_INFO(g_logger) << lamb::ProcessInfoMgr::GetInstance()->toString();
+    lamb::IOManager iom(1);
     timer = iom.addTimer(
         1000, []() {
-            MYSYLAR_LOG_INFO(g_logger) << "onTimer";
+            LAMB_LOG_INFO(g_logger) << "onTimer";
             static int count = 0;
             if (++count > 10) {
                 exit(1);
@@ -24,5 +24,5 @@ int server_main(int argc, char **argv) {
 }
 
 int main(int argc, char **argv) {
-    return sylar::start_daemon(argc, argv, server_main, true);
+    return lamb::start_daemon(argc, argv, server_main, true);
 }

@@ -4,32 +4,32 @@
 #include "../include/config.h"
 #include "../include/log.h"
 
-static sylar::Logger::ptr g_logger = MYSYLAR_LOG_ROOT();
+static lamb::Logger::ptr g_logger = LAMB_LOG_ROOT();
 
 #define XX(...) #__VA_ARGS__
 
-sylar::IOManager::ptr worker;
+lamb::IOManager::ptr worker;
 
 void run() {
-    g_logger->setLevel(sylar::LogLevel::INFO);
-    sylar::http::HttpServer::ptr server(new sylar::http::HttpServer(true, worker.get(), sylar::IOManager::GetThis()));
-    //sylar::http::HttpServer::ptr server(new sylar::http::HttpServer(true));
-    sylar::Address::ptr addr = sylar::Address::LookupAnyIPAddress("0.0.0.0:8020");
+    g_logger->setLevel(lamb::LogLevel::INFO);
+    lamb::http::HttpServer::ptr server(new lamb::http::HttpServer(true, worker.get(), lamb::IOManager::GetThis()));
+    //lamb::http::HttpServer::ptr server(new lamb::http::HttpServer(true));
+    lamb::Address::ptr addr = lamb::Address::LookupAnyIPAddress("0.0.0.0:8020");
     while (!server->bind(addr)) {
         sleep(2);
     }
     auto sd = server->getServletDispatch();
-    sd->addServlet("/sylar/xx", [](sylar::http::HttpRequest::ptr req, sylar::http::HttpResponse::ptr rsp, sylar::http::HttpSession::ptr session) {
+    sd->addServlet("/lamb/xx", [](lamb::http::HttpRequest::ptr req, lamb::http::HttpResponse::ptr rsp, lamb::http::HttpSession::ptr session) {
         rsp->setBody(req->toString());
         return 0;
     });
 
-    sd->addGlobServlet("/sylar/*", [](sylar::http::HttpRequest::ptr req, sylar::http::HttpResponse::ptr rsp, sylar::http::HttpSession::ptr session) {
+    sd->addGlobServlet("/lamb/*", [](lamb::http::HttpRequest::ptr req, lamb::http::HttpResponse::ptr rsp, lamb::http::HttpSession::ptr session) {
         rsp->setBody("Glob:\r\n" + req->toString());
         return 0;
     });
 
-    sd->addGlobServlet("/sylarx/*", [](sylar::http::HttpRequest::ptr req, sylar::http::HttpResponse::ptr rsp, sylar::http::HttpSession::ptr session) {
+    sd->addGlobServlet("/lambx/*", [](lamb::http::HttpRequest::ptr req, lamb::http::HttpResponse::ptr rsp, lamb::http::HttpSession::ptr session) {
         rsp->setBody(XX(<html>
                                 <head><title> 404 Not Found</ title></ head>
                                 <body>
@@ -58,11 +58,11 @@ void run() {
 }
 
 int main(int argc, char **argv) {
-    sylar::EnvMgr::GetInstance()->init(argc, argv);
-    sylar::Config::LoadFromConfDir(sylar::EnvMgr::GetInstance()->getConfigPath());
+    lamb::EnvMgr::GetInstance()->init(argc, argv);
+    lamb::Config::LoadFromConfDir(lamb::EnvMgr::GetInstance()->getConfigPath());
     
-    sylar::IOManager iom(1, true, "main");
-    worker.reset(new sylar::IOManager(300, false, "worker"));
+    lamb::IOManager iom(1, true, "main");
+    worker.reset(new lamb::IOManager(300, false, "worker"));
     iom.schedule(run);
     return 0;
 }

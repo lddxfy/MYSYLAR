@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 定义目标目录
-TARGET_DIR="/usr/include/sylar"
+TARGET_DIR="/usr/include/lamb"
 
 # 判断目标目录是否存在，如果不存在则创建
 if [ ! -d "$TARGET_DIR" ]; then
@@ -12,7 +12,7 @@ else
 fi
 
 # 安装头文件到目标目录
-sudo cp -r sylar/include/* "$TARGET_DIR/"
+sudo cp -r lamb/include/* "$TARGET_DIR/"
 
 # 安装动态库到 /usr/lib
 sudo cp lib/libsylar.so /usr/lib/

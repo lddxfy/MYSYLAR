@@ -18,14 +18,14 @@
 #include <arpa/inet.h>
 #include <fcntl.h>
 
-static sylar::Logger::ptr g_logger = MYSYLAR_LOG_ROOT();
+static lamb::Logger::ptr g_logger = LAMB_LOG_ROOT();
 
 /**
  * @brief 测试sleep被hook之后的浆果
  */
 void test_sleep() {
-    MYSYLAR_LOG_INFO(g_logger) << "test_sleep begin";
-    sylar::IOManager iom;
+    LAMB_LOG_INFO(g_logger) << "test_sleep begin";
+    lamb::IOManager iom;
     
     /**
      * 这里的两个协程sleep是同时开始的，一共只会睡眠3秒钟，第一个协程开始sleep后，会yield到后台，
@@ -33,15 +33,15 @@ void test_sleep() {
      */
     iom.schedule([] {
         sleep(2);
-        MYSYLAR_LOG_INFO(g_logger) << "sleep 2";
+        LAMB_LOG_INFO(g_logger) << "sleep 2";
     });
 
     iom.schedule([] {
         sleep(3);
-        MYSYLAR_LOG_INFO(g_logger) << "sleep 3";
+        LAMB_LOG_INFO(g_logger) << "sleep 3";
     });
 
-    MYSYLAR_LOG_INFO(g_logger) << "test_sleep end";
+    LAMB_LOG_INFO(g_logger) << "test_sleep end";
 }
 
 /**
@@ -56,9 +56,9 @@ void test_sock() {
     addr.sin_port = htons(12345);
     inet_pton(AF_INET, "127.0.0.1", &addr.sin_addr.s_addr);
 
-    MYSYLAR_LOG_INFO(g_logger) << "begin connect";
+    LAMB_LOG_INFO(g_logger) << "begin connect";
     int rt = connect(sock, (const sockaddr*)&addr, sizeof(addr));
-    MYSYLAR_LOG_INFO(g_logger) << "connect rt=" << rt << " errno=" << errno;
+    LAMB_LOG_INFO(g_logger) << "connect rt=" << rt << " errno=" << errno;
 
     if(rt) {
         return;
@@ -66,7 +66,7 @@ void test_sock() {
 
     const char data[] = "GET / HTTP/1.0\r\n\r\n";
     rt = send(sock, data, sizeof(data), 0);
-    MYSYLAR_LOG_INFO(g_logger) << "send rt=" << rt << " errno=" << errno;
+    LAMB_LOG_INFO(g_logger) << "send rt=" << rt << " errno=" << errno;
 
     if(rt <= 0) {
         return;
@@ -76,28 +76,28 @@ void test_sock() {
     buff.resize(4096);
 
     rt = recv(sock, &buff[0], buff.size(), 0);
-    MYSYLAR_LOG_INFO(g_logger) << "recv rt=" << rt << " errno=" << errno;
+    LAMB_LOG_INFO(g_logger) << "recv rt=" << rt << " errno=" << errno;
 
     if(rt <= 0) {
         return;
     }
 
     buff.resize(rt);
-    MYSYLAR_LOG_INFO(g_logger) << buff;
+    LAMB_LOG_INFO(g_logger) << buff;
 }
 
 int main(int argc, char *argv[]) {
-    sylar::EnvMgr::GetInstance()->init(argc, argv);
-    sylar::Config::LoadFromConfDir(sylar::EnvMgr::GetInstance()->getConfigPath());
+    lamb::EnvMgr::GetInstance()->init(argc, argv);
+    lamb::Config::LoadFromConfDir(lamb::EnvMgr::GetInstance()->getConfigPath());
 
     //test_sleep();
 
     
 
     // 只有以协程调度的方式运行hook才能生效
-    sylar::IOManager iom;
+    lamb::IOManager iom;
     iom.schedule(test_sock);
 
-    MYSYLAR_LOG_INFO(g_logger) << "main end";
+    LAMB_LOG_INFO(g_logger) << "main end";
     return 0;
 }

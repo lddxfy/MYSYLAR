@@ -3,7 +3,7 @@
 #include "../include/config.h"
 
 const char test_request_data[] = "POST /login?aa=bb#sss HTTP/1.1\r\n"
-                                 "Host: www.sylar.top\r\n"
+                                 "Host: www.lamb.top\r\n"
                                  "Content-Length: 10\r\n\r\n"
                                  "1234567890";
 
@@ -33,7 +33,7 @@ const char test_response_data[] = "HTTP/1.1 301 Moved Permanently\r\n"
                                   "</BODY></HTML>\r\n";
 
 void test_request(const char *str) {
-    sylar::http::HttpRequestParser parser;
+   lamb::http::HttpRequestParser parser;
     std::string tmp = str;
     std::cout << "<test_request>:" << std::endl
               << tmp << std::endl;
@@ -41,13 +41,13 @@ void test_request(const char *str) {
     if (parser.hasError()) {
         std::cout << "parser execute fail" << std::endl;
     } else {
-        sylar::http::HttpRequest::ptr req = parser.getData();
+       lamb::http::HttpRequest::ptr req = parser.getData();
         std::cout << req->toString() << std::endl;
     }
 }
 
 void test_response(const char *str) {
-    sylar::http::HttpResponseParser parser;
+   lamb::http::HttpResponseParser parser;
     std::string tmp = str;
     std::cout << "<test_response>:" << std::endl
               << tmp << std::endl;
@@ -55,14 +55,14 @@ void test_response(const char *str) {
     if (parser.hasError()) {
         std::cout << "parser execue fail" << std::endl;
     } else {
-        sylar::http::HttpResponse::ptr rsp = parser.getData();
+       lamb::http::HttpResponse::ptr rsp = parser.getData();
         std::cout << rsp->toString() << std::endl;
     }
 }
 
 int main(int argc, char *argv[]) {
-    sylar::EnvMgr::GetInstance()->init(argc, argv);
-    sylar::Config::LoadFromConfDir(sylar::EnvMgr::GetInstance()->getConfigPath());
+   lamb::EnvMgr::GetInstance()->init(argc, argv);
+   lamb::Config::LoadFromConfDir(lamb::EnvMgr::GetInstance()->getConfigPath());
 
     test_request(test_request_data);
     test_request(test_request_chunked_data);
