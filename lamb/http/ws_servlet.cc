@@ -1,6 +1,6 @@
 #include "http/ws_servlet.h"
 
-namespace sylar{
+namespace lamb{
 namespace http{
 
 FunctionWSServlet::FunctionWSServlet(callback cb
@@ -13,25 +13,25 @@ FunctionWSServlet::FunctionWSServlet(callback cb
 
                 }
 
-int32_t FunctionWSServlet::onConnect(sylar::http::HttpRequest::ptr header
-                   , sylar::http::WSSession::ptr session){
+int32_t FunctionWSServlet::onConnect(lamb::http::HttpRequest::ptr header
+                   , lamb::http::WSSession::ptr session){
     if(m_connect_cb){
         return m_connect_cb(header,session);
     }
     return 0;
 }
 
-int32_t FunctionWSServlet::onClose(sylar::http::HttpRequest::ptr header
-                   , sylar::http::WSSession::ptr session){
+int32_t FunctionWSServlet::onClose(lamb::http::HttpRequest::ptr header
+                   , lamb::http::WSSession::ptr session){
     if(m_close_cb){
         return m_close_cb(header,session);
     }
     return 0;
 } 
 
-int32_t FunctionWSServlet::handle(sylar::http::HttpRequest::ptr header
-                    ,sylar::http::WSFrameMessage::ptr msg
-                   , sylar::http::WSSession::ptr session){
+int32_t FunctionWSServlet::handle(lamb::http::HttpRequest::ptr header
+                    ,lamb::http::WSFrameMessage::ptr msg
+                   , lamb::http::WSSession::ptr session){
     if(m_callback){
         return m_callback(header,msg,session);
     }

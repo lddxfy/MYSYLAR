@@ -1,6 +1,6 @@
 #include "http/ws_connection.h"
 #include "../include/hash_util.h"
-namespace sylar{
+namespace lamb{
 namespace http{
 
 WSConnection::WSConnection(Socket::ptr sock,bool owner) : HttpConnection(sock,owner){
@@ -68,7 +68,7 @@ std::pair<HttpResult::ptr, WSConnection::ptr> WSConnection::Create(Uri::ptr uri
     }
     req->setHeader("Upgrade", "websocket");
     req->setHeader("Sec-webSocket-Version", "13");
-    req->setHeader("Sec-webSocket-Key", sylar::base64encode(random_string(16)));
+    req->setHeader("Sec-webSocket-Key", lamb::base64encode(random_string(16)));
     if(!has_host) {
         req->setHeader("Host", uri->getHost());
     }

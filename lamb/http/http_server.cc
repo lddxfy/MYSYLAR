@@ -1,13 +1,13 @@
 #include "http/http_server.h"
 #include "../include/log.h"
-namespace sylar{
+namespace lamb{
 namespace http{
 
-static sylar::Logger::ptr g_logger = MYSYLAR_LOG_NAME("system");
+static lamb::Logger::ptr g_logger = LAMB_LOG_NAME("system");
 
-HttpServer::HttpServer(bool keepalive,sylar::IOManager* worker,
-                sylar::IOManager* io_worker,
-                sylar::IOManager* accept_worker)
+HttpServer::HttpServer(bool keepalive,lamb::IOManager* worker,
+                lamb::IOManager* io_worker,
+                lamb::IOManager* accept_worker)
                 :TcpServer(worker,io_worker,accept_worker)
                 ,m_isKeepalive(keepalive){
     m_dispatch.reset(new ServletDispatch);
@@ -22,12 +22,12 @@ void HttpServer::setName(const std::string& v){
 }
 
 void HttpServer::handleClient(Socket::ptr client){
-    MYSYLAR_LOG_DEBUG(g_logger) << "handleClient" << *client;
+    LAMB_LOG_DEBUG(g_logger) << "handleClient" << *client;
     HttpSession::ptr session(new HttpSession(client));
     do {
         auto req = session->recvRequest();
         if(!req){
-            MYSYLAR_LOG_DEBUG(g_logger) << "recv http request fail, errno="
+            LAMB_LOG_DEBUG(g_logger) << "recv http request fail, errno="
                 << errno << " errstr=" << strerror(errno)
                 << " cliet:" << *client << " keep_alive=" << m_isKeepalive;
             break;

@@ -1,12 +1,12 @@
 #include "http/ws_session.h"
 #include "../include/hash_util.h"
 
-namespace sylar {
+namespace lamb {
 namespace http {
 
-static sylar::Logger::ptr g_logger = MYSYLAR_LOG_NAME("http");
+static lamb::Logger::ptr g_logger = LAMB_LOG_NAME("http");
 
-sylar::ConfigVar<uint32_t>::ptr g_websocket_message_max_size = sylar::Config::Lookup("websocket.message.max_size",(uint32_t) 1024 * 1024 * 32, "websocket message max size");
+lamb::ConfigVar<uint32_t>::ptr g_websocket_message_max_size = lamb::Config::Lookup("websocket.message.max_size",(uint32_t) 1024 * 1024 * 32, "websocket message max size");
 
 WSSession::WSSession(Socket::ptr sock, bool owner) : HttpSession(sock,owner){}
 //先接收一个解析完的req请求并对这个请求进行判断看看是否是一个websocket请求，不是则打印req并返回nullptr
@@ -16,35 +16,35 @@ HttpRequest::ptr WSSession::handleShake(){
     do {
         req = recvRequest();
 
-        MYSYLAR_LOG_DEBUG(g_logger) << req;
+        LAMB_LOG_DEBUG(g_logger) << req;
         if(!req){
-            MYSYLAR_LOG_INFO(g_logger) << "invalid http request";
+            LAMB_LOG_INFO(g_logger) << "invalid http request";
             break;
         }
 
         if(strcasecmp(req->getHeader("Connection").c_str(),"keep-alive, Upgrade")){
-            MYSYLAR_LOG_INFO(g_logger) << "http header Connection != Upgrade";
+            LAMB_LOG_INFO(g_logger) << "http header Connection != Upgrade";
             break;
         }
 
         if(strcasecmp(req->getHeader("Upgrade").c_str(),"websocket")){
-            MYSYLAR_LOG_INFO(g_logger) << "http header Upgrade != websocket";
+            LAMB_LOG_INFO(g_logger) << "http header Upgrade != websocket";
             break;
         }
         
         if(req->getHeaderAs<int>("Sec-webSocket-Version")!=13){
-            MYSYLAR_LOG_INFO(g_logger) << "http header Sec-webSocket-Version != 13";
+            LAMB_LOG_INFO(g_logger) << "http header Sec-webSocket-Version != 13";
             break;
         }
         //随机生成的 base64 码
         std::string key = req->getHeader("Sec-webSocket-Key");
         if(key.empty()){
-            MYSYLAR_LOG_INFO(g_logger) << "http header Sec-WebSocket-Key = null";
+            LAMB_LOG_INFO(g_logger) << "http header Sec-WebSocket-Key = null";
             break;
         }
 
         std::string v = key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
-        v = sylar::base64encode(sylar::sha1sum(v));
+        v = lamb::base64encode(lamb::sha1sum(v));
         req->setWebsocket(true);
 
         auto rsp = req->createResponse();
@@ -56,12 +56,12 @@ HttpRequest::ptr WSSession::handleShake(){
         rsp->setHeader("Sec-WebSocket-Accept", v);
 
         sendResponse(rsp);
-        MYSYLAR_LOG_DEBUG(g_logger) << *req;
-        MYSYLAR_LOG_DEBUG(g_logger) << *rsp;
+        LAMB_LOG_DEBUG(g_logger) << *req;
+        LAMB_LOG_DEBUG(g_logger) << *rsp;
         return req;
     }while(false);
     if(req){
-        MYSYLAR_LOG_INFO(g_logger) << *req;
+        LAMB_LOG_INFO(g_logger) << *req;
     }
     return nullptr;
 
@@ -111,10 +111,10 @@ WSFrameMessage::ptr WSRecvMessage(Stream* stream, bool client){
             break;
         }
         //打印发送的websocket请求的头部字段
-        MYSYLAR_LOG_DEBUG(g_logger) << "WSFrameHead " << ws_head.toString();
+        LAMB_LOG_DEBUG(g_logger) << "WSFrameHead " << ws_head.toString();
         //收到客户端的PING控制帧，应该回一个PONG
         if(ws_head.opcode == WSFrameHead::PING) {
-            MYSYLAR_LOG_INFO(g_logger) << "PING";
+            LAMB_LOG_INFO(g_logger) << "PING";
             if(WSPong(stream) <= 0) {
                 break;
             }
@@ -126,7 +126,7 @@ WSFrameMessage::ptr WSRecvMessage(Stream* stream, bool client){
                 || ws_head.opcode == WSFrameHead::BIN_FRAME) {
             
             if(!client && !ws_head.mask){
-                MYSYLAR_LOG_INFO(g_logger) << "WSFrameHead mask != 1";
+                LAMB_LOG_INFO(g_logger) << "WSFrameHead mask != 1";
                 break;
             }
 
@@ -137,21 +137,21 @@ WSFrameMessage::ptr WSRecvMessage(Stream* stream, bool client){
                 if(stream->readFixSize(&len,sizeof(len)) <= 0){
                     break;
                 }
-                length = sylar::byteswapOnLittleEndian(len);
+                length = lamb::byteswapOnLittleEndian(len);
             }//payload字段是127,就读7+64bit
             else if(ws_head.payload == 127){
                 uint64_t len = 0;
                 if(stream->readFixSize(&len,sizeof(len)) <= 0){
                     break;
                 }
-                length = sylar::byteswapOnLittleEndian(len);
+                length = lamb::byteswapOnLittleEndian(len);
             }//小于126,就直接把长度设置为payload
             else {
                 length = ws_head.payload;
             }
 
             if((cur_len + length) >= g_websocket_message_max_size->getValue()) {
-                MYSYLAR_LOG_WARN(g_logger) << "WSFrameMessage length > "
+                LAMB_LOG_WARN(g_logger) << "WSFrameMessage length > "
                     << g_websocket_message_max_size->getValue()
                     << " (" << (cur_len + length) << ")";
                 break;
@@ -181,14 +181,14 @@ WSFrameMessage::ptr WSRecvMessage(Stream* stream, bool client){
             }
             //表示这是消息的最后一个数据帧，打印发送的消息
             if(ws_head.fin) {
-                MYSYLAR_LOG_DEBUG(g_logger) << data;
+                LAMB_LOG_DEBUG(g_logger) << data;
                 return WSFrameMessage::ptr(new WSFrameMessage(opcode, std::move(data)));
             }
         }else if(ws_head.opcode == WSFrameHead::CLOSE){
-            MYSYLAR_LOG_DEBUG(g_logger) << "opcode=8, close"; // 这里忽略剩下的4个mask字节也没关闭
+            LAMB_LOG_DEBUG(g_logger) << "opcode=8, close"; // 这里忽略剩下的4个mask字节也没关闭
             break;
         }else {
-            MYSYLAR_LOG_DEBUG(g_logger) << "invalid opcode=" << ws_head.opcode;
+            LAMB_LOG_DEBUG(g_logger) << "invalid opcode=" << ws_head.opcode;
         }
     }while(true);
     stream->close();
@@ -219,12 +219,12 @@ int32_t WSSendMessage(Stream* stream, WSFrameMessage::ptr msg, bool client, bool
 
         if(ws_head.payload == 126) {
             uint16_t len = size;
-            len = sylar::byteswapOnLittleEndian(len);
+            len = lamb::byteswapOnLittleEndian(len);
             if(stream->writeFixSize(&len, sizeof(len)) <= 0) {
                 break;
             }
         }else if(ws_head.payload == 127) {
-            uint16_t len = sylar::byteswapOnLittleEndian(len);
+            uint16_t len = lamb::byteswapOnLittleEndian(len);
             if(stream->writeFixSize(&len, sizeof(len)) <= 0) {
                 break;
             }

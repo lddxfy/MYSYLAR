@@ -2,12 +2,12 @@
 #include "http/http_parser.h"
 #include "../include/log.h"
 
-namespace sylar
+namespace lamb
 {
     namespace http
     {
 
-        static sylar::Logger::ptr g_logger = MYSYLAR_LOG_NAME("system");
+        static lamb::Logger::ptr g_logger = LAMB_LOG_NAME("system");
 
         std::string HttpResult::toString() const
         {
@@ -136,7 +136,7 @@ namespace sylar
 
         HttpConnection::~HttpConnection()
         {
-            MYSYLAR_LOG_DEBUG(g_logger) << "HttpConnection::~HttpConnection";
+            LAMB_LOG_DEBUG(g_logger) << "HttpConnection::~HttpConnection";
         }
 
         HttpResponse::ptr HttpConnection::recvResponse()
@@ -270,7 +270,7 @@ namespace sylar
 
         HttpConnection::ptr HttpConnectionPool::getConnection()
         {
-            uint64_t now_ms = sylar::GetCurrentMS();
+            uint64_t now_ms = lamb::GetCurrentMS();
             std::vector<HttpConnection *> invalid_conns;
             HttpConnection *ptr = nullptr;
             MutexType::Lock lock(m_mutex);
@@ -306,19 +306,19 @@ namespace sylar
                 IPAddress::ptr addr = Address::LookupAnyIPAddress(m_host);
                 if (!addr)
                 {
-                    MYSYLAR_LOG_ERROR(g_logger) << "get addr fail: " << m_host;
+                    LAMB_LOG_ERROR(g_logger) << "get addr fail: " << m_host;
                     return nullptr;
                 }
                 addr->setPort(m_port);
                 Socket::ptr sock = Socket::CreateTCP(addr);
                 if (!sock)
                 {
-                    MYSYLAR_LOG_ERROR(g_logger) << "create sock fail: " << *addr;
+                    LAMB_LOG_ERROR(g_logger) << "create sock fail: " << *addr;
                     return nullptr;
                 }
                 if (!sock->connect(addr))
                 {
-                    MYSYLAR_LOG_ERROR(g_logger) << "sock connect fail: " << *addr;
+                    LAMB_LOG_ERROR(g_logger) << "sock connect fail: " << *addr;
                     return nullptr;
                 }
 
@@ -331,7 +331,7 @@ namespace sylar
         void HttpConnectionPool::ReleasePtr(HttpConnection *ptr, HttpConnectionPool *pool)
         {
             ++ptr->m_request;
-            if (!ptr->isConnected() || (ptr->m_createTime + pool->m_maxAliveTime) >= sylar::GetCurrentMS() || (ptr->m_request >= pool->m_maxRequest))
+            if (!ptr->isConnected() || (ptr->m_createTime + pool->m_maxAliveTime) >= lamb::GetCurrentMS() || (ptr->m_request >= pool->m_maxRequest))
             {
                 delete ptr;
                 --pool->m_total;
