@@ -1,7 +1,7 @@
 #ifndef __SYLAR_HTTP_WS_SESSION_H__
 #define __SYLAR_HTTP_WS_SESSION_H__
 
-#include "../config.h"
+#include "../include/config.h"
 #include "http_session.h"
 #include <stdint.h>
 

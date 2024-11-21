@@ -1,4 +1,4 @@
-#include "uri.h"
+#include "../include/uri.h"
 #include <iostream>
 
 int main(int argc, char * argv[]) {

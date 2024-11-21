@@ -20,7 +20,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 
 # 添加包含路径
-include_directories(${CMAKE_SOURCE_DIR}/sylar)
+include_directories(${CMAKE_SOURCE_DIR}/sylar/include)
 include_directories(.)
 
 option(BUILD_TEST "ON for complile test" ON)

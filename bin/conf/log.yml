@@ -9,7 +9,7 @@ logs:
       appenders:
           - type: StdoutLogAppender
           - type: FileLogAppender
-            file: /home/chensir/Documents/mysylar/system.txt
+            file: /home/mdzn_cjq/cppworkspace/MYSYLAR/system.txt
     - name: http
       level: debug
       appenders:

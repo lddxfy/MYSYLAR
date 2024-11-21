@@ -1,7 +1,7 @@
 #include <iostream>
 #include <pthread.h>
-#include "thread.h"
-#include "log.h"
+#include "../include/thread.h"
+#include "../include/log.h"
 
 sylar::Logger::ptr g_logger = MYSYLAR_LOG_ROOT();
 

@@ -6,12 +6,12 @@
  * @version 0.1
  * @date 2021-06-16
  */
-#include "log.h"
-#include "scheduler.h"
-#include "iomanager.h"
-#include "env.h"
-#include "util.h"
-#include "config.h"
+#include "../include/log.h"
+#include "../include/scheduler.h"
+#include "../include/iomanager.h"
+#include "../include/env.h"
+#include "../include/util.h"
+#include "../include/config.h"
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>

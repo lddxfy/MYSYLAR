@@ -1,6 +1,6 @@
-#include "tcp_server.h"
-#include "log.h"
-#include "config.h"
+#include "include/tcp_server.h"
+#include "include/log.h"
+#include "include/config.h"
 
 namespace sylar{
 

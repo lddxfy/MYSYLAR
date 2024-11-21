@@ -1,6 +1,6 @@
-#include "env.h"
-#include "log.h"
-#include "config.h"
+#include "include/env.h"
+#include "include/log.h"
+#include "include/config.h"
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>

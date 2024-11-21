@@ -1,8 +1,8 @@
-#include "iomanager.h"
-#include "tcp_server.h"
-#include "log.h"
-#include "config.h"
-#include "env.h"
+#include "../include/iomanager.h"
+#include "../include/tcp_server.h"
+#include "../include/log.h"
+#include "../include/config.h"
+#include "../include/env.h"
 
 static sylar::Logger::ptr g_logger = MYSYLAR_LOG_ROOT();
 

@@ -4,6 +4,7 @@
 #include <functional>
 #include <semaphore.h>
 #include <atomic>
+#include <stdexcept>
 
 #include "nocopyable.h"
 namespace sylar{

@@ -1,6 +1,6 @@
-#include "http/http_parser.h"
-#include "env.h"
-#include "config.h"
+#include "../include/http/http_parser.h"
+#include "../include/env.h"
+#include "../include/config.h"
 
 const char test_request_data[] = "POST /login?aa=bb#sss HTTP/1.1\r\n"
                                  "Host: www.sylar.top\r\n"

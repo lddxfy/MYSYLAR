@@ -1,10 +1,10 @@
 #ifndef __SYLAR_HTTP_CONNECTION_H__
 #define __SYLAR_HTTP_CONNECTION_H__
 
-#include "../streams/socket_stream.h"
+#include "../include/socket_stream.h"
 #include "http.h"
-#include "../uri.h"
-#include "../thread.h"
+#include "../include/uri.h"
+#include "../include/thread.h"
 
 #include <list>
 

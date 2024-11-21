@@ -2,9 +2,9 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/syscall.h>
-#include "config.h"
-#include "log.h"
-#include "env.h"
+#include "../include/config.h"
+#include "../include/log.h"
+#include "../include/env.h"
 
 #include <unistd.h>
 

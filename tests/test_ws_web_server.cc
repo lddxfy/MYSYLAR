@@ -6,11 +6,11 @@
  * @version 0.1
  * @date 2022-07-26
  */
-#include "http/ws_server.h"
-#include "log.h"
-#include "config.h"
-#include "env.h"
-#include "http/http_server.h"
+#include "../include/http/ws_server.h"
+#include "../include/log.h"
+#include "../include/config.h"
+#include "../include/env.h"
+#include "../include/http/http_server.h"
 
 static sylar::Logger::ptr g_logger = MYSYLAR_LOG_ROOT();
 

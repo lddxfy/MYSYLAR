@@ -1,7 +1,8 @@
 file(REMOVE_RECURSE
-  "../bin/test_scheduler"
-  "../bin/test_scheduler.pdb"
+  "/home/mdzn_cjq/cppworkspace/MYSYLAR/bin/test_scheduler"
+  "/home/mdzn_cjq/cppworkspace/MYSYLAR/bin/test_scheduler.pdb"
   "CMakeFiles/test_scheduler.dir/tests/test_scheduler.cc.o"
+  "CMakeFiles/test_scheduler.dir/tests/test_scheduler.cc.o.d"
 )
 
 # Per-language clean rules from dependency scanning.

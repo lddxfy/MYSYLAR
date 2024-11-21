@@ -1,7 +1,8 @@
 file(REMOVE_RECURSE
-  "../bin/test_fiber"
-  "../bin/test_fiber.pdb"
+  "/home/mdzn_cjq/cppworkspace/MYSYLAR/bin/test_fiber"
+  "/home/mdzn_cjq/cppworkspace/MYSYLAR/bin/test_fiber.pdb"
   "CMakeFiles/test_fiber.dir/tests/test_fiber.cc.o"
+  "CMakeFiles/test_fiber.dir/tests/test_fiber.cc.o.d"
 )
 
 # Per-language clean rules from dependency scanning.

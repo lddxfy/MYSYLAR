@@ -4,6 +4,7 @@
 #include "singleton.h"
 #include <map>
 #include <vector>
+#include <string>
 
 
 

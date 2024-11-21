@@ -1,10 +1,10 @@
 #ifndef __SYLAR_SOCKET_STREAM_H__
 #define __SYLAR_SOCKET_STREAM_H__
 
-#include "../stream.h"
-#include "../socket.h"
-#include "../address.h"
-#include "../bytearray.h"
+#include "stream.h"
+#include "socket.h"
+#include "address.h"
+#include "bytearray.h"
 
 namespace sylar{
 

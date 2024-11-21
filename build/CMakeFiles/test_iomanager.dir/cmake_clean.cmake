@@ -1,7 +1,8 @@
 file(REMOVE_RECURSE
-  "../bin/test_iomanager"
-  "../bin/test_iomanager.pdb"
+  "/home/mdzn_cjq/cppworkspace/MYSYLAR/bin/test_iomanager"
+  "/home/mdzn_cjq/cppworkspace/MYSYLAR/bin/test_iomanager.pdb"
   "CMakeFiles/test_iomanager.dir/tests/test_iomanager.cc.o"
+  "CMakeFiles/test_iomanager.dir/tests/test_iomanager.cc.o.d"
 )
 
 # Per-language clean rules from dependency scanning.

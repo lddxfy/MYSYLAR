@@ -1,7 +1,8 @@
 file(REMOVE_RECURSE
-  "../bin/test_thread"
-  "../bin/test_thread.pdb"
+  "/home/mdzn_cjq/cppworkspace/MYSYLAR/bin/test_thread"
+  "/home/mdzn_cjq/cppworkspace/MYSYLAR/bin/test_thread.pdb"
   "CMakeFiles/test_thread.dir/tests/test_thread.cc.o"
+  "CMakeFiles/test_thread.dir/tests/test_thread.cc.o.d"
 )
 
 # Per-language clean rules from dependency scanning.

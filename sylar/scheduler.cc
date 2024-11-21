@@ -1,6 +1,6 @@
-#include "scheduler.h"
-#include "log.h"
-#include "hook.h"
+#include "include/scheduler.h"
+#include "include/log.h"
+#include "include/hook.h"
 
 namespace sylar
 {

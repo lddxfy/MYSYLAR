@@ -6,10 +6,10 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include "http.h"
-#include "http_session.h"
-#include "../thread.h"
-#include "../util.h"
+#include "http/http.h"
+#include "http/http_session.h"
+#include "../include/thread.h"
+#include "../include/util.h"
 
 
 namespace sylar{

@@ -1,5 +1,5 @@
-#include "ws_session.h"
-#include "../util/hash_util.h"
+#include "http/ws_session.h"
+#include "../include/hash_util.h"
 
 namespace sylar {
 namespace http {

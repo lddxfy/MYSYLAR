@@ -1,7 +1,8 @@
 file(REMOVE_RECURSE
-  "../bin/test_bytearray"
-  "../bin/test_bytearray.pdb"
+  "/home/mdzn_cjq/cppworkspace/MYSYLAR/bin/test_bytearray"
+  "/home/mdzn_cjq/cppworkspace/MYSYLAR/bin/test_bytearray.pdb"
   "CMakeFiles/test_bytearray.dir/tests/test_bytearray.cc.o"
+  "CMakeFiles/test_bytearray.dir/tests/test_bytearray.cc.o.d"
 )
 
 # Per-language clean rules from dependency scanning.

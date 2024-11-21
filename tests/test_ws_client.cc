@@ -1,9 +1,9 @@
-#include "http/ws_server.h"
-#include "http/ws_connection.h"
-#include "log.h"
-#include "config.h"
-#include "env.h"
-#include "util/hash_util.h"
+#include "../include/http/ws_server.h"
+#include "../include/http/ws_connection.h"
+#include "../include/log.h"
+#include "../include/config.h"
+#include "../include/env.h"
+#include "../include/hash_util.h"
 
 void run(){
     auto rt = sylar::http::WSConnection::Create("http://127.0.0.1:8020/sylar",1000);

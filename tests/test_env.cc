@@ -1,6 +1,6 @@
-#include "log.h"
-#include "env.h"
-#include "util.h"
+#include "../include/log.h"
+#include "../include/env.h"
+#include "../include/util.h"
 
 sylar::Logger::ptr g_logger = MYSYLAR_LOG_ROOT();
 
